@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+{% if category %}
+    {{category.description | truncatewords:155}}
+{% else %}
+    ABC store collects
+{% endif %}
+{% endblock %}
+{% block title %}
+{% if category %}
+    {{category.name}}
+{% else %}
+    see our collections
+{% endif %}
+{% endblock %}
+{% block content %}
+<div>
+{% if category %}
+<div class="container">
+    <div class="row my_row_class">
+        <div class="mx_auto">
+        <a href="{% url 'shop:allProdCat' %}">All products</a>
+        </div>
+    </div>
+     </div>
+</div>
+{% endif %}
+{% if category %}
+<div>
+    <div class="mx_auto">
+        <img  class="my_image" src="{{category.image.url}}" alt="{{category.name}}" width="350" height="400">
+    </div>
+    <br>
+    <div>
+        <h4 class="text-center my_title">{{category.name}}</h4>
+        <p class="text-justify">{{category.description}}</p>
+    </div>
+    {% else %}
+    <div>
+        <img class="my_image my_image_padding" src="{% static 'img/banner.png' %}" alt="banner" width="800px">
+    </div>
+    <br>
+    <div>
+        <h4 class="text-center my_title">our collections</h4>
+        <p class="text-justify">As we all know, a paragraph is a group of sentences that are connected and make absolute sense. While writing a long essay or letter, we break them into paragraphs for better understanding and to make a well-structured writing piece. Paragraph writing on any topic is not only about expressing your thoughts on the given topic, but it is also about framing ideas about the topic and making it convenient for the readers to follow it. In English paragraph writing, it is essential to focus on the writing style, i.e., the flow and connection between the sentences.</p>
+    </div>
+</div>
+{% endif %}
+<div class="container">
+    <div class="row mx_auto">
+{% for product in products.object_list %}
+    <div class="my_bottom_margin col-6 col-sm-6 col-md-3 xol-lg-3">
+        <div class="card text-center" style="min-width:8rem;">
+        <a href="{{product.get_url}}"><img class="card-img-top " src="{{product.image.url}}" alt="{{product.name}}" width="200" height="300"></a>
+        <div class="card-body">
+        <h4>{{product.name}}</h4>
+        <p>${{product.price}}</p>
+        </div>
+        </div>
+        </div>
+{% endfor %}
+        <br>
+</div>
+    <div class="mx_auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    </div>
+{% endblock %}
